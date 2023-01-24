@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+<title>Patient's portal</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+	body {
+		color: #fff;
+		background: #63738a;
+		font-family: 'Roboto', sans-serif;
+	}
+    .form-control{
+		height: 40px;
+		box-shadow: none;
+		color: #969fa4;
+	}
+	.form-control:focus{
+		border-color: #5cb85c;
+	}
+    .form-control, .btn{
+        border-radius: 3px;
+    }
+	.signup-form{
+		width: 700px;
+		margin: 0 auto;
+		padding: 40px 0;
+	}
+	.signup-form h2{
+		color: #636363;
+        margin: 0 0 15px;
+		position: relative;
+		text-align: center;
+    }
+	.signup-form h2:before, .signup-form h2:after{
+		content: "";
+		height: 2px;
+		width: 30%;
+		background: #d4d4d4;
+		position: absolute;
+		top: 50%;
+		z-index: 2;
+	}
+	.signup-form h2:before{
+		left: 0;
+	}
+	.signup-form h2:after{
+		right: 0;
+	}
+    .signup-form .hint-text{
+		color: #999;
+		margin-bottom: 30px;
+		text-align: center;
+	}
+    .signup-form form{
+		color: #999;
+		border-radius: 3px;
+    	margin-bottom: 15px;
+        background: #f2f3f7;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+    }
+	.signup-form .form-group{
+		margin-bottom: 20px;
+	}
+	.signup-form input[type="checkbox"]{
+		margin-top: 3px;
+	}
+	.signup-form .btn{
+        font-size: 16px;
+        font-weight: bold;
+		min-width: 140px;
+        outline: none !important;
+    }
+	.signup-form .row div:first-child{
+		padding-right: 10px;
+	}
+	.signup-form .row div:last-child{
+		padding-left: 10px;
+	}
+    .signup-form a{
+		color: #fff;
+		text-decoration: underline;
+	}
+    .signup-form a:hover{
+		text-decoration: none;
+	}
+	.signup-form form a{
+		color: #5cb85c;
+		text-decoration: none;
+	}
+	.signup-form form a:hover{
+		text-decoration: underline;
+	}
+</style>
+
+
+</head>
+<body>
+<a href="home"><button type="button" class="btn btn-default btn-sm">
+          <span class="glyphicon glyphicon-log-out"></span> Log out
+        </button></a>
+<a href="bookappointment" style="float: right;"><button type="button" class="btn btn-primary">Book Appointment</button></a>
+{% for message in messages %}
+
+<h3 style="text-align: center;">{{message}}</h3>
+
+{%  endfor %}
+<div class="signup-form">
+    <form action="savedata" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+		<h2>Medical Details</h2>
+		<p class="hint-text">Please fill your medical details.</p>
+        <div class="form-group">
+        	<input type="text" class="form-control" name="firstname" placeholder="First Name" required="required" value="{{ patient.fname }}">
+        </div>
+        <div class="form-group">
+        	<input type="text" class="form-control" name="lastname" placeholder="Last Name" required="required" value="{{ patient.lname }}">
+        </div>
+        <div class="form-group">
+        	<input type="text" class="form-control" name="username" placeholder="Username" required="required" value="{{ patient.uname }}">
+        </div>
+
+        <div class="form-group">
+        	<input type="email" class="form-control" name="email" placeholder="Email" required="required" value="{{ patient.email }}">
+        </div>
+		<div class="form-group">
+            <input type="date" class="form-control" name="date" placeholder="Date" required="required" value="{{ patient.date }}">
+        </div>
+        <div class="form-group">
+            <input type="tel" class="form-control" name="number" placeholder="Phone no." required="required" value="{{ patient.phone }}">
+        </div>
+		<div class="form-group">
+            <input type="text" class="form-control" name="city" placeholder="City" required="required" value="{{ patient.city }}">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="state" placeholder="State" required="required" value="{{ patient.state }}">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="symptoms" placeholder="Symptoms" required="required" value="{{ patient.symptoms }}" >
+        </div>
+
+        <div class="form-group">
+            <label for="w3review">Problem in brief:</label><br>
+<textarea id="w3review" name="w3review" rows="4" cols="50" >{{patient.problem_in_breif}}</textarea>
+        </div>
+    <div class="form-group">
+        <label>Blood Report</label>
+         <img src="{{ patient.bloodreport.url }}" class="img-responsive" style="width: 200px; padding:14px" />
+ <input  name="bloodreport" type="file"  class="form-control-file">
+    </div>
+        <div class="form-group" >
+        <label>Health Report</label>
+            <img src="{{ patient.healthreport.url }}" class="img-responsive" style="width: 200px; padding:14px" />
+ <input  name="healthreport" type="file"  class="form-control-file">
+    </div>
+        <div class="form-group">
+        <label>Other Report</label>
+            <img src="{{ patient.otherreport.url }}" class="img-responsive" style="width: 200px; padding:14px" />
+ <input  name="otherreport" type="file"  class="form-control-file">
+    </div>
+
+
+
+
+        <div class="form-group">
+			<label class="checkbox-inline"><input type="checkbox" required="required" onclick="reply_click()" > I accept the <a href="#">Terms of Use</a> &amp; <a href="#">Privacy Policy</a></label>
+		</div>
+		<div class="form-group">
+            <button type="submit" class="btn btn-success btn-lg btn-block" onclick="reply_click()">Save Now</button>
+        </div>
+
+    </form>
+
+
+</body>
+</html>
